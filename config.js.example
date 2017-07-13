@@ -1,0 +1,16 @@
+/**
+ * Created by jaxsen on 7/13/2017 @ 5:24 AM.
+ */
+
+let config = {};
+
+// twitch bot info
+config.twitchuser = ""; // bot username
+config.twitchpass = ""; // bot oauth password
+config.twitchclientid = ""; // blot client id
+config.twitchchats = [""]; // put name channel names as strings
+
+// discord bot info
+config.discordtoken = ""; // bot token
+
+module.exports = config;
