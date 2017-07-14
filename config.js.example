@@ -4,13 +4,19 @@
 
 let config = {};
 
+//// TWITCH SETTINGS
 // twitch bot info
 config.twitchuser = ""; // bot username
 config.twitchpass = ""; // bot oauth password
 config.twitchclientid = ""; // blot client id
 config.twitchchats = [""]; // put channel names that you want the bot to join
+// misc
+config.twitchprefix = "!"; // what prefix do you want bot commands to require
 
-// discord bot info
+//// DISCORD SETTINGS
+// bot info
 config.discordtoken = ""; // bot token [https://discordapp.com/developers/applications/me]
+// misc
+config.discordprefix = "!"; // what prefix do you want bot commands to require
 
 module.exports = config;

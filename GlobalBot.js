@@ -122,7 +122,7 @@ GlobalBot.prototype.doCMD = function(com,src,reqs){
 //        reqs[1] is where twitch variables are
 
 // __DISCORD AND TWITCH__ //
-// yorn
+// yorn - sends yes or no
 GlobalBot.prototype.yorn = function(src,reqs){
     if(Math.random() >= 0.5){
         this.gSay(src,`${this.at(src,reqs)}, yes.`,reqs);
@@ -130,7 +130,7 @@ GlobalBot.prototype.yorn = function(src,reqs){
         this.gSay(src,`${this.at(src,reqs)}, no.`,reqs);
     }
 };
-// ping
+// ping - responds with '@<user>, pong!
 GlobalBot.prototype.ping = function(src,reqs){
     this.gSay(src,`${this.at(src,reqs)}, pong!`,reqs);
 };
@@ -140,15 +140,25 @@ GlobalBot.prototype.ping = function(src,reqs){
 GlobalBot.prototype.addchannel = function(src,reqs){
     const attr = this.getMessage(src,reqs).split(" ");
 };
-// purge chat
+// purge chat - deletes all messages in channel
 GlobalBot.prototype.purge = function(src,reqs){
     const message = reqs[0][0];
-    const param = message.content.split(" ");
-    if (this.discord.checkPerms(message, "MANAGE_MESSAGES")){
-        if(param[1]<1){return;} // make sure param[1] is valid
-        message.channel.fetchMessages({limit:param[1]})
-            .then(messages => {console.log(`Received ${messages.size} messages...`); messages.deleteAll(); console.log('Cleared!');})
-            .catch(console.error);
+    if(message.guild !== null) {
+        const param = message.content.split(" ");
+        if (this.discord.checkPerms(message, "MANAGE_MESSAGES")) {
+            if (param[1] < 1) {
+                return;
+            } // make sure param[1] is valid
+
+            message.channel.fetchMessages({limit: param[1]})
+                .then(messages => {
+                    messages.deleteAll();
+                })
+                .catch(console.error);
+        }
+    } else {
+        // guild isn't available
+        this.gSay(src,"Sorry! This command doesn't work in DMs.",reqs);
     }
 };
 

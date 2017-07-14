@@ -2,7 +2,7 @@
  * Created by jaxsen on 7/11/2017 @ 4:08 AM.
  */
 
-function DiscordBot(g,bot) {
+function DiscordBot(g,bot,prefix) {
     this.discord_prefix = "!";
 
     this.global = g;
@@ -43,7 +43,7 @@ DiscordBot.prototype.mRec = function(message){
 
 // permission checker
 DiscordBot.prototype.checkPerms = function(message, perm){
-    // get roles that are able to use this command
+    // get roles that are able to use this command & see if the user has it
     const rolesArray = message.guild.roles.array();
     for (let i = 0; i< rolesArray.length; i++){
         let perms = new this.Discord.Permissions(rolesArray[i].permissions);

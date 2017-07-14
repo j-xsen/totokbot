@@ -45,7 +45,8 @@ G.addDiscord(DBot);
 
 // twitch
 const TwitchBot = require('./TwitchBot');
-const TBot = new TwitchBot(G, [config.twitchclientid,config.twitchuser,config.twitchpass],config.twitchchats);
+const TBot = new TwitchBot(G,[config.twitchclientid,config.twitchuser,config.twitchpass],
+                           config.twitchchats,config.twitchprefix);
 G.addTwitch(TBot);
 
 // start twitch online ping

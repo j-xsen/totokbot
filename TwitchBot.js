@@ -2,8 +2,10 @@
  * Created by jaxsen on 7/12/2017 @ 2:24 AM.
  */
 
-function TwitchBot(g,bot,channelsSend){
+function TwitchBot(g,bot,channelsSend,_prefix){
     this.tmi = require('tmi.js');
+
+    this.prefix = _prefix;
 
     this.channelsObs = channelsSend;
     this.channelsPing = {"s":[]};
@@ -33,7 +35,11 @@ function TwitchBot(g,bot,channelsSend){
     });
 
     this.client.on("chat",function(channel,userstate,message,self){
+        // make sure is not a bot message
         if(self)return;
+
+        // make sure it's a bot command
+        if(!message.startsWith(_prefix))return;
 
         g.cmdRec(message, "twitch", [], [channel,userstate,message,self]);
     });
