@@ -8,9 +8,9 @@ let config = {};
 config.twitchuser = ""; // bot username
 config.twitchpass = ""; // bot oauth password
 config.twitchclientid = ""; // blot client id
-config.twitchchats = [""]; // put name channel names as strings
+config.twitchchats = [""]; // put channel names that you want the bot to join
 
 // discord bot info
-config.discordtoken = ""; // bot token
+config.discordtoken = ""; // bot token [https://discordapp.com/developers/applications/me]
 
 module.exports = config;

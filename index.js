@@ -11,11 +11,13 @@ const streams = {
         //                                            //
         //  {                                         //
         //      "name":"totokbot",                    //
-        //      "recips":["othertest","test"]         //
+        //      "recips":["othertest","test"],        //
+        //      "lastsent":true                       //
         //  },                                        //
         //  {                                         //
         //      "name":"totok13",                     //
-        //      "recips":["test"]                     //
+        //      "recips":["test"],                    //
+        //      "lastsent":false                      //
         //  }                                         //
         //                                            //
         //// /\ example of what will appear here /\ ////

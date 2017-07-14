@@ -61,20 +61,4 @@ DiscordBot.prototype.at = function(message){
     return `<@!${message.author.id}>`;
 };
 
-//// COMMANDS!!! ////
-// TODO:: CONVERT THESE TO GLOBAL
-// send cmd
-DiscordBot.prototype.doCMD = function(cmd,message){
-  this[cmd](message);
-};
-// purge
-DiscordBot.prototype.purge = function(message){
-    const param = message.content.split(" ");
-    if (this.checkPerms(message, "MANAGE_MESSAGES")){
-        message.channel.fetchMessages({limit:param[1]})
-            .then(messages => {console.log(`Received ${messages.size} messages...`); messages.deleteAll(); console.log('Cleared!');})
-            .catch(console.error);
-    }
-};
-
 module.exports = DiscordBot;

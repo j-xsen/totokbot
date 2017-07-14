@@ -136,9 +136,20 @@ GlobalBot.prototype.ping = function(src,reqs){
 };
 
 //      __DISCORD__      //
-// add channel
+// add channel TODO::FINISH
 GlobalBot.prototype.addchannel = function(src,reqs){
     const attr = this.getMessage(src,reqs).split(" ");
+};
+// purge chat
+GlobalBot.prototype.purge = function(src,reqs){
+    const message = reqs[0][0];
+    const param = message.content.split(" ");
+    if (this.discord.checkPerms(message, "MANAGE_MESSAGES")){
+        if(param[1]<1){return;} // make sure param[1] is valid
+        message.channel.fetchMessages({limit:param[1]})
+            .then(messages => {console.log(`Received ${messages.size} messages...`); messages.deleteAll(); console.log('Cleared!');})
+            .catch(console.error);
+    }
 };
 
 module.exports = GlobalBot;
