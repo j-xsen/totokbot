@@ -150,7 +150,7 @@ GlobalBot.prototype.addchannel = function(src,reqs){
     const attr = this.getMessage(src,reqs).split(" ");
 
     // make sure it is a channel
-    this.twitch.isChannel("TEST",this.twitch)
+    this.twitch.isChannel("TEST")
         .then(response => {
             if(response){
                 // check if is in this.twitch.channelsPing

@@ -73,7 +73,8 @@ TwitchBot.prototype.msg = function(channel,msg){
  * @param channel - Channel name to check
  */
 
-TwitchBot.prototype.isChannel = function(channel,self){
+TwitchBot.prototype.isChannel = function(channel){
+    const self = this;
     return new Promise(function(resolve,reject){
         // make sure follows twitch regex
         if(!self.userregex.test(channel)){
