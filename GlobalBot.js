@@ -7,28 +7,28 @@ function GlobalBot(){
     this.cmd = {
         "purge": {
             "src": "discord",
-            "attr": 0,
+            "attr": [0,-1],
             "correct": ""
         },
         "ping": {
             "src": "twitchdiscord",
-            "attr": 0,
+            "attr": [0,-1],
             "correct": ""
         },
         "yorn": {
             "src": "twitchdiscord",
-            "attr": 0,
+            "attr": [0,-1],
             "correct": ""
         },
         "check": {
             "src": "discord",
-            "attr": 0,
+            "attr": [0,-1],
             "correct": ""
         },
         "addchannel": {
             "src": "discord",
-            "attr": 1,
-            "correct": "!addchannel [channel]"
+            "attr": [1,2],
+            "correct": "!addchannel [channel] (do you want feed notifications (y/n))"
         }
     }
 }
@@ -73,7 +73,15 @@ GlobalBot.prototype.checkIfCMD = function(subbed,src){
 
 // check if command attributes are correct
 GlobalBot.prototype.checkAttr = function (com){
-    return com[this.cmd[com[0]]["attr"]];
+    const min = this.cmd[com[0]]["attr"][0];
+    const max = this.cmd[com[0]]["attr"][1];
+    const thisAttr = com.length - 1;
+
+    // check min
+    if(thisAttr < min)return false;
+
+    // check max
+    return !(thisAttr > max && max !== -1);
 };
 
 // send message to either twitch or discord depending on src
@@ -98,10 +106,10 @@ GlobalBot.prototype.at = function(src,req){
 // get message
 GlobalBot.prototype.getMessage = function(src,req){
     if(src === "discord"){
-        return req[0].content;
+        return req[0][0].content;
     }
     else if(src === "twitch"){
-        return req[2];
+        return req[1][2];
     }
 };
 
@@ -138,7 +146,24 @@ GlobalBot.prototype.ping = function(src,reqs){
 //      __DISCORD__      //
 // add channel TODO::FINISH
 GlobalBot.prototype.addchannel = function(src,reqs){
+    // get attributes
     const attr = this.getMessage(src,reqs).split(" ");
+
+    // make sure it is a channel
+    this.twitch.isChannel("TEST",this.twitch)
+        .then(response => {
+            if(response){
+                // check if is in this.twitch.channelsPing
+                let already_made = false;
+                if(this.twitch.channelsPing[attr[1]]){
+                    already_made = true;
+                }
+                console.log("ALREADY MADE: " + already_made);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
 };
 // purge chat - deletes all messages in channel
 GlobalBot.prototype.purge = function(src,reqs){
