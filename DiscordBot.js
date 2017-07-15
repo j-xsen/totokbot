@@ -3,7 +3,7 @@
  */
 
 function DiscordBot(g,bot,prefix) {
-    this.discord_prefix = "!";
+    this.discord_prefix = prefix;
 
     this.global = g;
 

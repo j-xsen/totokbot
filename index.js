@@ -11,7 +11,7 @@ const G = new GlobalBot();
 
 // discord
 const DiscordBot = require('./DiscordBot');
-const DBot = new DiscordBot(G, [config.discordtoken]);
+const DBot = new DiscordBot(G, [config.discordtoken],config.discordprefix);
 G.addDiscord(DBot);
 
 // twitch
