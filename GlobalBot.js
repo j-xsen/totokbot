@@ -28,9 +28,13 @@ function GlobalBot(){
         "addchannel": {
             "src": "discord",
             "attr": [1,2],
-            "correct": "!addchannel [channel] (do you want feed notifications (y/n))"
+            "correct": "!addchannel [channel] (@ everyone? (y/N))"
         }
     }
+
+    // alternatives to y/n
+    this.y = ["yes","ye","y","1","true"];
+    this.n = ["no","n","0","nope","false"];
 }
 
 // add discord to globalbot object
@@ -117,6 +121,14 @@ GlobalBot.prototype.doCMD = function(com,src,reqs){
     this[com](src,reqs);
 };
 
+// check if it's a yes/or no
+GlobalBot.prototype.ynMatch = function(msg){
+    if(this.y.includes(msg)){ return "y"; }
+    if(this.n.includes(msg)){ return "n"; }
+    return "";
+};
+
+
 //// ---[ COMMANDS ]--- ////
 // to make a new command:
 // ```
@@ -138,30 +150,54 @@ GlobalBot.prototype.yorn = function(src,reqs){
         this.gSay(src,`${this.at(src,reqs)}, no.`,reqs);
     }
 };
-// ping - responds with '@<user>, pong!
+// ping - responds with '@<user>, pong!'
 GlobalBot.prototype.ping = function(src,reqs){
     this.gSay(src,`${this.at(src,reqs)}, pong!`,reqs);
 };
 
 //      __DISCORD__      //
-// add channel TODO::FINISH
+// add channel
 GlobalBot.prototype.addchannel = function(src,reqs){
     // get attributes
     const attr = this.getMessage(src,reqs).split(" ");
+
+    this.gSay(src,`Turning on notifications for ${attr[1]}...`,reqs);
 
     // make sure it is a channel
     this.twitch.isChannel(attr[1])
         .then(response => {
             if(response){
                 // check if is in this.twitch.channelsPing
-                let already_made = false;
-                if(this.twitch.channelsPing[attr[1]]){
-                    already_made = true;
+                let already_made = this.twitch.channelsPing[attr[1]];
+
+                // not yet in channelsPing! add it to the list
+                if(!already_made){
+                    console.log(`Adding ${attr[1]} to channelsPing`);
+                    this.twitch.channelsPing[attr[1]] = {
+                        "recs":[],
+                        "lastsent":false,
+                        "starttime":null
+                    }
                 }
-                console.log("ALREADY MADE: " + already_made);
+
+                // check if channel is already in
+                for(let x = 0; x < this.twitch.channelsPing[attr[1]]["recs"].length; x++){
+                    if(this.twitch.channelsPing[attr[1]]["recs"][x][0].id === reqs[0][0].channel.id){
+                        this.gSay(src,`This channel already has notifications for ${attr[1]}!`,reqs);
+                        return;
+                    }
+                }
+
+                // add this discord channel to list
+                this.twitch.channelsPing[attr[1]]["recs"].push([reqs[0][0].channel,this.ynMatch(attr[2]) === "y"]);
+
+                this.gSay(src,`Notifications turned on for ${attr[1]}!`,reqs);
+            } else {
+                this.gSay(src,`${attr[1]} isn't a channel!`,reqs);
             }
         })
         .catch(error => {
+            this.gSay(src,"Error! Try again!",reqs);
             console.log(error);
         });
 };

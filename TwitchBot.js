@@ -39,7 +39,11 @@ function TwitchBot(g,bot,channelsSend,_prefix){
 
     this.client = new this.tmi.client(options);
 
-    this.client.connect();
+    this.client.connect().then(function(data){
+
+    }).catch(function(err){
+        console.log(`Could not connect to Twitch! (${err})`);
+    });
 
     this.client.on("connecting",function(address,port){
         console.log("Connecting!");
@@ -54,8 +58,6 @@ function TwitchBot(g,bot,channelsSend,_prefix){
 
         g.cmdRec(message, "twitch", [], [channel,userstate,message,self]);
     });
-
-    this.userregex = new RegExp(/^[a-zA-Z0-9][\w]{3,24}$/g);
 }
 
 // gets an @ for a user
@@ -72,12 +74,12 @@ TwitchBot.prototype.msg = function(channel,msg){
  * @description Checks if a channel is an actual channel
  * @param channel - Channel name to check
  */
-
 TwitchBot.prototype.isChannel = function(channel){
     const self = this;
     return new Promise(function(resolve,reject){
         // make sure follows twitch regex
-        if(!self.userregex.test(channel)){
+        const reg = new RegExp(/^[a-zA-Z0-9][\w]{3,24}$/g);
+        if(!reg.test(channel)){
             resolve(false);
         }
 
