@@ -40,16 +40,13 @@ DiscordBot.prototype.msg = function(msg, response){
 };
 
 DiscordBot.prototype.msgR = function(msg,response){
-    console.log("msgR running");
     return new Promise(function(resolve,reject){
-        console.log("1");
         msg.channel.send(response)
             .then(function(message){
-                console.log("sent message!");
                 resolve(message);
             })
             .catch(function(e){
-                console.log("ERROR " + e);
+                console.log("ERROR msgR: " + e);
                 reject(e);
             });
     });

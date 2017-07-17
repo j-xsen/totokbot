@@ -102,7 +102,7 @@ function StarterModule(g){
                             })
                             .catch(error => {
                                 message.edit(`Error! Try again!`);
-                                console.log(error);
+                                console.log(`Error @ StarterModule AddChannel: ${error}`);
                             });
                     });
             }

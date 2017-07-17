@@ -10,13 +10,7 @@ function TwitchBot(g,bot,channelsSend,_prefix){
     this.channelsObs = channelsSend;
 
     // TODO:: convert to sqlite
-    this.channelsPing = {
-        "totokbot": {
-            "recs":[],
-            "lastsent":false,
-            "starttime":null
-        }
-    };
+    this.channelsPing = {};
 
     this.global = g;
 
@@ -91,7 +85,6 @@ TwitchBot.prototype.isChannel = function(channel){
             }
         }, (err,res,body)=>{
             if(!err){
-                console.log(body["status"]);
                 resolve(body["status"] !== 404);
             } else {
                 reject("Error: " + err);
@@ -103,25 +96,32 @@ TwitchBot.prototype.isChannel = function(channel){
 // check if streams defined @ this.channelsPing are online
 // cycles between all people, 1955 characters @ at a time
 // (smallest # at a time is 78)(largest # at a time is 488)
-// TODO:: cycles
-TwitchBot.prototype.check = function(){
+// cycle starts at 0 and goes up
+TwitchBot.prototype.check = function(cycle){
     let cs = "";
 
     const it = this.channelsPing;
-    let curlength = "https://api.twitch.tv/kraken/streams?channel=".length; // length of twitch api string
+    const urllength = "https://api.twitch.tv/kraken/streams?channel=".length; // length of twitch api string
+
+    // divide into cycles
+    let cyclesDiv = [""];
+    let oncycle = 0;
     for(let x in it){
-        // check to see if there's room
-        if(curlength - x.length >= 2){
+        // see if there's room
+        if(cyclesDiv[oncycle].length + x.length + 1 < 2000 - urllength){
             // there is! add it to the string
-            curlength -= x.length;
-            cs += `${x},`;
+            cyclesDiv[oncycle] += `${x},`;
+        } else {
+            // no room! add one to oncycle
+            oncycle += 1;
+            cyclesDiv[oncycle] = `${x},`;
         }
     }
 
-    if(cs !== "") {
-        console.log("pinging");
+    if(cyclesDiv[cycle]) {
+        console.log(`Pinging[${cycle}/${oncycle}]: ${cyclesDiv[cycle]}`);
         this.client.api({
-            url: `/streams?channel=${cs}`,
+            url: `/streams?channel=${cyclesDiv[cycle]}`,
             headers: {
                 "Client-ID": this.client.clientId
             }
@@ -132,12 +132,21 @@ TwitchBot.prototype.check = function(){
                 console.log(err);
             }
         });
-    } else { console.log("not pinging"); }
+    } else { console.log(`Not Pinging!`); }
 
-    // timeout to re-ping later
-    setTimeout(() => {
-        this.check();
-    }, 5000); // set to 60 when done debugging
+    // check if there should be more cycles
+    if(cycle < oncycle){
+        // there should! re-ping in 2 seconds
+        setTimeout(() => {
+            this.check(cycle + 1);
+        }, 2000);
+    } else {
+        // finished cycle!! re-ping in a minute
+        setTimeout(() => {
+            this.check(0);
+        }, 60000);
+    }
+
 };
 
 module.exports = TwitchBot;
