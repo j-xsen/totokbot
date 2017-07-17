@@ -92,7 +92,8 @@ function StarterModule(g){
                                     }
 
                                     // add this discord channel to list
-                                    g.twitch.channelsPing[attr[1]]["recs"].push([reqs[0][0].channel,g.ynMatch(attr[2]) === "y"]);
+                                    g.twitch.channelsPing[attr[1]]["recs"].push([reqs[0][0].channel,
+                                                                                g.ynMatch(attr[2]) === "y"]);
 
                                     message.edit(`Notifications turned on for ${attr[1]}!`);
                                 } else {

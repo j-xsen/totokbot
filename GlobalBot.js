@@ -39,7 +39,9 @@ GlobalBot.prototype.cmdRec = function(msg,src,discord,twitch){
     if(check[0]){
         // make sure it has a valid number of attributes
         if(!this.checkAttr(com, check[1])){
-            this.gSay(src,`Correct usage: ${this.convertCorrectUsage(src,this.cmd[check[1]][com[0]]["correct"])}`,[discord,twitch]);
+            this.gSay(src,
+                `Correct usage: ${this.convertCorrectUsage(src,this.cmd[check[1]][com[0]]["correct"])}`,
+                [discord,twitch]);
             return false;
         }
 
