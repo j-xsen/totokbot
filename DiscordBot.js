@@ -28,11 +28,31 @@ function DiscordBot(g,bot,prefix) {
     });
 
     // Log our bot in
-    discord_client.login(token);
+    discord_client.login(token).then(function(data){
+
+    }).catch(function(error){
+        console.log(`Error connecting to Discord! (${error})`);
+    });
 }
 
 DiscordBot.prototype.msg = function(msg, response){
     msg.channel.send(response);
+};
+
+DiscordBot.prototype.msgR = function(msg,response){
+    console.log("msgR running");
+    return new Promise(function(resolve,reject){
+        console.log("1");
+        msg.channel.send(response)
+            .then(function(message){
+                console.log("sent message!");
+                resolve(message);
+            })
+            .catch(function(e){
+                console.log("ERROR " + e);
+                reject(e);
+            });
+    });
 };
 
 DiscordBot.prototype.mRec = function(message){

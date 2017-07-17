@@ -4,37 +4,15 @@
 
 function GlobalBot(){
     // Create commands to accept
-    this.cmd = {
-        "purge": {
-            "src": "discord",
-            "attr": [0,-1],
-            "correct": ""
-        },
-        "ping": {
-            "src": "twitchdiscord",
-            "attr": [0,-1],
-            "correct": ""
-        },
-        "yorn": {
-            "src": "twitchdiscord",
-            "attr": [0,-1],
-            "correct": ""
-        },
-        "check": {
-            "src": "discord",
-            "attr": [0,-1],
-            "correct": ""
-        },
-        "addchannel": {
-            "src": "discord",
-            "attr": [1,2],
-            "correct": "!addchannel [channel] (@ everyone? (y/N))"
-        }
-    }
+    this.cmd = {};
 
     // alternatives to y/n
-    this.y = ["yes","ye","y","1","true"];
-    this.n = ["no","n","0","nope","false"];
+    this.y = ["yes","ye","y","1","true","yeah","sure"];
+    this.n = ["no","n","0","nope","false","noo","nada","not"];
+
+    // modules
+    this.activeModules = [];
+    this.modulesInit();
 }
 
 // add discord to globalbot object
@@ -57,28 +35,54 @@ GlobalBot.prototype.cmdRec = function(msg,src,discord,twitch){
     let com = subbed.split(" ");
 
     // check if it is a command for the source
-    if(this.checkIfCMD(com[0],src)){
+    const check = this.checkIfCMD(com[0],src);
+    if(check[0]){
         // make sure it has a valid number of attributes
-        if(!this.checkAttr(com)){
-            this.gSay(src,`Correct usage: ${this.cmd[com[0]]["correct"]}`,[discord,twitch]);
+        if(!this.checkAttr(com, check[1])){
+            this.gSay(src,`Correct usage: ${this.convertCorrectUsage(src,this.cmd[check[1]][com[0]]["correct"])}`,[discord,twitch]);
             return false;
         }
 
         // send it
-        this.doCMD(com[0],src,[discord,twitch]);
+        this.doCMD(check[1],com[0],src,[discord,twitch]);
+    }
+};
+
+GlobalBot.prototype.convertCorrectUsage = function(src,correct){
+    if(src === "twitch"){
+        return correct.replace(/\[prefix]/g,this.twitch.prefix);
+    } else if (src === "discord"){
+        return correct.replace(/\[prefix]/g,this.discord.discord_prefix);
     }
 };
 
 // check if command exists in cmd & fits source
+// returns [bool source&exists, string module name]
 GlobalBot.prototype.checkIfCMD = function(subbed,src){
-    try{return this.cmd[subbed]["src"].includes(src);}
-    catch(e){return false;}
+    //try{return this.cmd[subbed]["src"].includes(src);}
+    //catch(e){return false;}
+
+    let rtrn = false;
+    let modulename = "";
+    // for each module, check if the command is there
+    for(let i = 0; i < this.activeModules.length; i++){
+        // check if command exists
+        if(this.cmd[this.activeModules[i]][subbed]){
+            // check if source is avaliable for this
+            if(this.cmd[this.activeModules[i]][subbed]["src"].includes(src)){
+                rtrn = true;
+                modulename = this.activeModules[i];
+            }
+        }
+    }
+
+    return [rtrn,modulename];
 };
 
 // check if command attributes are correct
-GlobalBot.prototype.checkAttr = function (com){
-    const min = this.cmd[com[0]]["attr"][0];
-    const max = this.cmd[com[0]]["attr"][1];
+GlobalBot.prototype.checkAttr = function (com, mod){
+    const min = this.cmd[mod][com[0]]["attr"][0];
+    const max = this.cmd[mod][com[0]]["attr"][1];
     const thisAttr = com.length - 1;
 
     // check min
@@ -117,8 +121,9 @@ GlobalBot.prototype.getMessage = function(src,req){
     }
 };
 
-GlobalBot.prototype.doCMD = function(com,src,reqs){
-    this[com](src,reqs);
+// do a command
+GlobalBot.prototype.doCMD = function(mod,com,src,reqs){
+    this.cmd[mod][com]["f"](src,reqs);
 };
 
 // check if it's a yes/or no
@@ -128,99 +133,22 @@ GlobalBot.prototype.ynMatch = function(msg){
     return "";
 };
 
+// get all modules & add them to the list
+GlobalBot.prototype.modulesInit = function(){
+    const modulesF = './modules/';
+    const fs = require('fs');
 
-//// ---[ COMMANDS ]--- ////
-// to make a new command:
-// ```
-// GlobalBot.prototype.[name] = function(src,reqs){
-//     // your code
-// }
-// ```
-// src = where the command came from ("twitch" or "discord")
-// reqs = what each message event sends (discord is discord.js message object & twitch is all the vars)
-//        reqs[0] is where discord variables are
-//        reqs[1] is where twitch variables are
-
-// __DISCORD AND TWITCH__ //
-// yorn - sends yes or no
-GlobalBot.prototype.yorn = function(src,reqs){
-    if(Math.random() >= 0.5){
-        this.gSay(src,`${this.at(src,reqs)}, yes.`,reqs);
-    }else{
-        this.gSay(src,`${this.at(src,reqs)}, no.`,reqs);
-    }
-};
-// ping - responds with '@<user>, pong!'
-GlobalBot.prototype.ping = function(src,reqs){
-    this.gSay(src,`${this.at(src,reqs)}, pong!`,reqs);
-};
-
-//      __DISCORD__      //
-// add channel
-GlobalBot.prototype.addchannel = function(src,reqs){
-    // get attributes
-    const attr = this.getMessage(src,reqs).split(" ");
-
-    this.gSay(src,`Turning on notifications for ${attr[1]}...`,reqs);
-
-    // make sure it is a channel
-    this.twitch.isChannel(attr[1])
-        .then(response => {
-            if(response){
-                // check if is in this.twitch.channelsPing
-                let already_made = this.twitch.channelsPing[attr[1]];
-
-                // not yet in channelsPing! add it to the list
-                if(!already_made){
-                    console.log(`Adding ${attr[1]} to channelsPing`);
-                    this.twitch.channelsPing[attr[1]] = {
-                        "recs":[],
-                        "lastsent":false,
-                        "starttime":null
-                    }
-                }
-
-                // check if channel is already in
-                for(let x = 0; x < this.twitch.channelsPing[attr[1]]["recs"].length; x++){
-                    if(this.twitch.channelsPing[attr[1]]["recs"][x][0].id === reqs[0][0].channel.id){
-                        this.gSay(src,`This channel already has notifications for ${attr[1]}!`,reqs);
-                        return;
-                    }
-                }
-
-                // add this discord channel to list
-                this.twitch.channelsPing[attr[1]]["recs"].push([reqs[0][0].channel,this.ynMatch(attr[2]) === "y"]);
-
-                this.gSay(src,`Notifications turned on for ${attr[1]}!`,reqs);
-            } else {
-                this.gSay(src,`${attr[1]} isn't a channel!`,reqs);
-            }
-        })
-        .catch(error => {
-            this.gSay(src,"Error! Try again!",reqs);
-            console.log(error);
+    fs.readdir(modulesF,(err,files) => {
+        files.forEach(file =>{
+            // init file
+            const thisRoundReq = require(modulesF + file.substring(0, file.length - 3));
+            const thisRound = new thisRoundReq(this);
+            // add to this.cmd
+            this.cmd[file.substring(0,file.length - 3)] = thisRound.cmd;
+            // add to active modules
+            this.activeModules.push(file.substring(0, file.length - 3));
         });
-};
-// purge chat - deletes all messages in channel
-GlobalBot.prototype.purge = function(src,reqs){
-    const message = reqs[0][0];
-    if(message.guild !== null) {
-        const param = message.content.split(" ");
-        if (this.discord.checkPerms(message, "MANAGE_MESSAGES")) {
-            if (param[1] < 1) {
-                return;
-            } // make sure param[1] is valid
-
-            message.channel.fetchMessages({limit: param[1]})
-                .then(messages => {
-                    messages.deleteAll();
-                })
-                .catch(console.error);
-        }
-    } else {
-        // guild isn't available
-        this.gSay(src,"Sorry! This command doesn't work in DMs.",reqs);
-    }
+    });
 };
 
 module.exports = GlobalBot;

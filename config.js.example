@@ -17,6 +17,6 @@ config.twitchprefix = "!"; // what prefix do you want bot commands to require
 // bot info
 config.discordtoken = ""; // bot token [https://discordapp.com/developers/applications/me]
 // misc
-config.discordprefix = "!"; // what prefix do you want bot commands to require
+config.discordprefix = "!"; // what prefix do you want bot commands to require TODO::multiple character prefix
 
 module.exports = config;

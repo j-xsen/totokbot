@@ -91,7 +91,8 @@ TwitchBot.prototype.isChannel = function(channel){
             }
         }, (err,res,body)=>{
             if(!err){
-                resolve(body["status"] !== "404");
+                console.log(body["status"]);
+                resolve(body["status"] !== 404);
             } else {
                 reject("Error: " + err);
             }
