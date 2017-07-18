@@ -19,6 +19,3 @@ const TwitchBot = require('./TwitchBot');
 const TBot = new TwitchBot(G,[config.twitchclientid,config.twitchuser,config.twitchpass],
                            config.twitchchats,config.twitchprefix);
 G.addTwitch(TBot);
-
-// start twitch online ping
-TBot.check();

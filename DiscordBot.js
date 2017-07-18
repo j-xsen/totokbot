@@ -12,6 +12,7 @@ function DiscordBot(g,bot,prefix) {
 
     // Create an instance of a Discord client
     const discord_client = new this.Discord.Client();
+    this.d_client = discord_client;
 
     // The token of your bot - https://discordapp.com/developers/applications/me
     const token = bot[0];
@@ -55,7 +56,10 @@ DiscordBot.prototype.msgR = function(msg,response){
 DiscordBot.prototype.mRec = function(message){
     if(!message.content.startsWith(this.discord_prefix)){return;}
 
-    this.global.cmdRec(message.content,"discord",[message],[]);
+    // decide whether or not it's a dm
+    const src = message.guild === null ? "dm" : "discord";
+
+    this.global.cmdRec(message.content,src,[message],[]);
 };
 
 // permission checker
@@ -76,6 +80,11 @@ DiscordBot.prototype.checkPerms = function(message, perm){
 // get @ info [returns string]
 DiscordBot.prototype.at = function(message){
     return `<@!${message.author.id}>`;
+};
+
+// gets a channel based off of an id
+DiscordBot.prototype.getChannel = function(id){
+    return this.d_client.channels.find('id',id);
 };
 
 module.exports = DiscordBot;
