@@ -7,14 +7,7 @@ function TwitchBot(g,bot,channelsSend,_prefix){
 
     this.prefix = _prefix;
 
-    this.channelsObs = channelsSend;
-
-    // TODO:: convert to sqlite
-    this.channelsPing = {};
-
     this.global = g;
-
-    this.pingcycle = 0;
 
     const options = {
         options: {
