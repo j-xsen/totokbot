@@ -3,18 +3,26 @@
  */
 
 function ExampleModule(g){
-    this.global = g;
+    const funcone = function(src,reqs){
+        g.gSay(src,`${g.at(src,reqs)}, command one worked!`,reqs);
+    };
 
-    const examplefunction = function(src,reqs){ // must have src,reqs as parameters
-        g.gSay(src,`${g.at(src,reqs)}, example function worked!`,reqs);
+    const functwo = function(src,reqs){
+        g.gSay(src,`${g.at(src,reqs)}, command two worked!`,reqs);
     };
 
     this.cmd = {
-        "commandname": {
+        "commandone": {
             "src": "*",
             "attr": [0, -1],
-            "correct": "[prefix]commandname",
-            "f": examplefunction
+            "correct": "[prefix]commandone",
+            "f": funcone
+        },
+        "commandtwo": {
+            "src": "discorddm",
+            "attr": [0,-1],
+            "correct": "[prefix]commandtwo",
+            "f": functwo
         }
     };
 }
