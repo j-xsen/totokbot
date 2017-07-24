@@ -19,10 +19,12 @@
 ## adding modules
 
   0. for this, MODULENAME is the name of your module, so replace it when actually adding it
-      -- if you are low on time/don't want to read this, you can duplicate ExampleModule.js.example and adjust that file. just remove .example from the name & make it a javascript file.
+  
+      * if you are low on time/don't want to read this, you can duplicate ExampleModule.js.example and adjust that file. just remove .example from the name & make it a javascript file.
+	  
   1. create the file ```./modules/MODULENAME.js```
   2. create a constructor with one parameter, g
-    -- (ex. ```function MODULENAME(g){ }```)
+      * ex: ```function MODULENAME(g){ }```
   3. put ```module.exports = MODULENAME;``` at the end of the file
   4. in the constructor, add a public json object called cmd
   5. add your commands into cmd with the following format (remove comments):
@@ -46,15 +48,19 @@
         }
         ```
   6. create a variable that is equal to a function with two arguments
-      -- argument one is a string that says the source ("discord", "twitch",or "dm")
-      -- argument two is an array, [discord_variables, twitch_variables]
-      0. discord_variables
-          0. [discord.js message](https://discord.js.org/#/docs/main/stable/class/Message)
-      1. [twitch_variables](https://docs.tmijs.org/v1.2.1/Events.html#message)
-          0. string ```channel``` - the channel name
-          1. object ```userstate``` - [the userstate object](https://docs.tmijs.org/v1.2.1/Events.html#message)
-          2. string ```message``` - the message that was received
-          3. bool ```self``` - is this message from the bot (should always be false, if true is handled in TwitchBot.js)
+  
+      * argument one is a string that says the source ("discord", "twitch",or "dm")
+	  
+      * argument two is an array, [discord_variables, twitch_variables]
+	  
+      1. discord_variables
+          * 1 - [discord.js message](https://discord.js.org/#/docs/main/stable/class/Message)
+		
+      2. [twitch_variables](https://docs.tmijs.org/v1.2.1/Events.html#message)
+          * 0 - string ```channel``` - the channel name
+          * 1 - object ```userstate``` - [the userstate object](https://docs.tmijs.org/v1.2.1/Events.html#message)
+          * 2 - string ```message``` - the message that was received
+          * 3 - bool ```self``` - is this message from the bot (should always be false, if true is handled in TwitchBot.js)
     7. your file should now look something like this:
         ```javascript
         function MODULENAME(g){
@@ -81,17 +87,19 @@ global is meant to allow you to interact with discord and twitch without having 
 
 #### outer functions
 *these are the functions that you'll probably use. even though these are the only global functions, you can still use [discord.js](https://discord.js.org/#/docs/main/stable/general/welcome) and [tmi.js](https://docs.tmijs.org/) by getting the twitch/discord objects from your global object.*
+
 Function | Parameters | Returns | What it does
-- | - | - | -
+-------- | ---------- | ------- | ------------
 gSay | ```src``` string, ```msg``` string, ```reqs``` array[discord_variables,twitch_variables] | | Sends a messge to either Discord or Twitch depending on ```src```
 at | ```src``` string, ```reqs``` array[discord_variables,twitch_variables] | string | Returns the string needed to @ the sender of the message
 getMessage | ```src``` string, ```reqs``` array[discord_variables,twitch_variables] | string | Returns the message sent as a string
 ynMatch | ```msg``` string | string ("y","n", or "") | Checks if string matches yes or no (vars g.y,g.n)
 
 #### inner functions
-*These are functions your probably won't use, and are more for internal workings*
+*These are functions your probably won't use and are more for internal workings.*
+
 Function | Paramters | What it does
-- | - | -
+-------- | --------- | ------------
 addDiscord | ```d``` DiscordBot | Adds the DiscordBot object to the global object
 addTwitch | ```t``` TwitchBot | Adds the TwitchBot object to the global object
 cmdRec | ```msg``` string, ```src``` string, ```discord``` discord_variables, ```twitch``` twitch_variables | Checks whether or not to do a command
