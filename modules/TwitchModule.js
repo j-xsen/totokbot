@@ -218,7 +218,10 @@ function TwitchModule(g){
 
                                             const alertthese = thisuser.recipients.split(",");
                                             for (let x = 0; x < alertthese.length; x++) {
-                                                g.discord.getChannel(alertthese[x]).send(`${offlinechannels[i]} has gone offline!`);
+                                                const chan = g.discord.getChannel(alertthese[x]);
+                                                if(chan) {
+                                                    chan.send(`${offlinechannels[i]} has gone offline!`);
+                                                }
                                             }
                                             db.run("UPDATE twitch SET lastsent=0 WHERE username=$user", {
                                                 $user: offlinechannels[i]
@@ -303,7 +306,7 @@ function TwitchModule(g){
         ////  __DISCORD & TWITCH__  ////
         // uptime - get uptime of a channel
         "uptime": {
-            "src": "discorddmtwitch",
+            "src": "*",
             "attr": [1,-1,0,-1],
             "correct": "[prefix]uptime [channel]",
             "f": uptime

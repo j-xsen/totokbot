@@ -163,13 +163,16 @@ GlobalBot.prototype.modulesInit = function(){
 
     fs.readdir(modulesF,(err,files) => {
         files.forEach(file =>{
-            // init file
-            const thisRoundReq = require(modulesF + file.substring(0, file.length - 3));
-            const thisRound = new thisRoundReq(this);
-            // add to this.cmd
-            this.cmd[file.substring(0,file.length - 3)] = thisRound.cmd;
-            // add to active modules
-            this.activeModules.push(file.substring(0, file.length - 3));
+            // make sure it is a module
+            if(file.substring(file.length - 3, file.length) === ".js") {
+                // init file
+                const thisRoundReq = require(modulesF + file.substring(0, file.length - 3));
+                const thisRound = new thisRoundReq(this);
+                // add to this.cmd
+                this.cmd[file.substring(0, file.length - 3)] = thisRound.cmd;
+                // add to active modules
+                this.activeModules.push(file.substring(0, file.length - 3));
+            }
         });
     });
 };
