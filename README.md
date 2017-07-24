@@ -10,7 +10,7 @@
 ## installation
 
   1. install npm & node.js ([dl](https://nodejs.org/en/download/)/[tutorial](https://nodejs.org/en/download/package-manager/))
-  2. [clone](https://help.github.com/articles/cloning-a-repository/) (requites [git](https://git-scm.com/downloads)) or [download the repository and extract it to a folder](https://github.com/totok13/totokbot/archive/master.zip)
+  2. [clone](https://help.github.com/articles/cloning-a-repository/) (requires [git](https://git-scm.com/downloads)) or [download the repository and extract it to a folder](https://github.com/totok13/totokbot/archive/master.zip)
   3. open a command prompt or [git bash](https://git-scm.com/downloads) in the repository's location and type ```npm install```
   4. duplicate ```config.js.example``` and name the new file ```config.js```
   5. edit ```config.js``` to match your preferences
