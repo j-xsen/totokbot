@@ -10,7 +10,7 @@
 ## installation
 
   1. install npm & node.js ([dl](https://nodejs.org/en/download/)/[tutorial](https://nodejs.org/en/download/package-manager/))
-  2. [clone](https://help.github.com/articles/cloning-a-repository/) (requites [git](https://git-scm.com/downloads)) or [download the repository and extract it to a folder](https://github.com/totok13/totokbot/archive/master.zip)
+  2. [clone](https://help.github.com/articles/cloning-a-repository/) (requires [git](https://git-scm.com/downloads)) or [download the repository and extract it to a folder](https://github.com/totok13/totokbot/archive/master.zip)
   3. open a command prompt or [git bash](https://git-scm.com/downloads) in the repository's location and type ```npm install```
   4. duplicate ```config.js.example``` and name the new file ```config.js```
   5. edit ```config.js``` to match your preferences
@@ -54,7 +54,7 @@
       * argument two is an array, [discord_variables, twitch_variables]
 	  
       1. discord_variables
-          * 1 - [discord.js message](https://discord.js.org/#/docs/main/stable/class/Message)
+          * 0 - [discord.js message](https://discord.js.org/#/docs/main/stable/class/Message)
 		
       2. [twitch_variables](https://docs.tmijs.org/v1.2.1/Events.html#message)
           * 0 - string ```channel``` - the channel name
