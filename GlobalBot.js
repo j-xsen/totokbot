@@ -40,7 +40,7 @@ GlobalBot.prototype.cmdRec = function(msg,src,discord,twitch){
         // make sure it has a valid number of attributes
         if(!this.checkAttr(com, check[1], src)){
             this.gSay(src,
-                `Correct usage: ${this.convertCorrectUsage(src,this.cmd[check[1]][com[0]]["correct"])}`,
+                `Correct usage: ${this.convertCorrectUsage(src,this.cmd[check[1]][com[0]]["correct"],com)}`,
                 [discord,twitch]);
             return false;
         }
@@ -54,11 +54,12 @@ GlobalBot.prototype.cmdRec = function(msg,src,discord,twitch){
     }
 };
 
-GlobalBot.prototype.convertCorrectUsage = function(src,correct){
+GlobalBot.prototype.convertCorrectUsage = function(src,correct,com){
+    correct = correct.replace(/\[#cmdname#]/g,com);
     if(src === "twitch"){
-        return correct.replace(/\[prefix]/g,this.twitch.prefix);
+        return correct.replace(/\[#prefix#]/g,this.twitch.prefix);
     } else if (src === "discord" || src === "dm"){
-        return correct.replace(/\[prefix]/g,this.discord.discord_prefix);
+        return correct.replace(/\[#prefix#]/g,this.discord.discord_prefix);
     }
 };
 

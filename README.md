@@ -43,7 +43,10 @@
                             // // if there r 4 arguments, the 1st 2 become discord's cap and the last 2 r twitch's
                             // // // ex [1,-1,0,-1] = 1 arg required for discord, 0 required for twitch
             "correct":"[prefix]commandname",    // what to display when someone enters the wrong # of args
-                                                // [prefix] gets changed to the prefix that is being used
+                                                // [#prefix#] gets changed to the prefix that is being used
+                                                // [#cmdname#] get changes to the command name
+            "check":[["dm","This command does not work in DMs!"]] // OPTIONAL
+                                                                  // what message to send if source === [n[0]]
             "f":functionname    // what function to use when the command is ran
         }
         ```
@@ -103,7 +106,7 @@ Function | Paramters | What it does
 addDiscord | ```d``` DiscordBot | Adds the DiscordBot object to the global object
 addTwitch | ```t``` TwitchBot | Adds the TwitchBot object to the global object
 cmdRec | ```msg``` string, ```src``` string, ```discord``` discord_variables, ```twitch``` twitch_variables | Checks whether or not to do a command
-convertCorrectUsage | ```src``` string, ```correct``` string | Formats a command's "correct"
+convertCorrectUsage | ```src``` string, ```correct``` string, ```com``` command | Formats a command's "correct"
 checkIfCMD | ```subbed``` string, ```src``` string | Checks if a command exists and if it fits the source
 checkAttr | ```com``` array[arguments], ```mod``` string, ```src``` string | Checks if submitted command fits the number of attributes
 doCMD | ```mod``` string, ```com``` string, ```src``` string, ```reqs``` array[discord_variables,twitch_variables] | Does a command

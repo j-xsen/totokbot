@@ -38,14 +38,14 @@ function StarterModule(g){
         "ping": {
             "src": "*",
             "attr": [0, -1],
-            "correct": "",
+            "correct": "[#prefix#][#cmdname#]",
             "f": ping
         },
         // yorn - sends yes or no
         "yorn": {
             "src": "*",
             "attr": [0, -1],
-            "correct": "",
+            "correct": "[#prefix#][#cmdname#]",
             "f": yorn
         },
 
@@ -54,7 +54,7 @@ function StarterModule(g){
         "purge": {
             "src": "discord",
             "attr": [1, -1],
-            "correct": "[prefix]purge [number of messages to delete]",
+            "correct": "[#prefix#][#cmdname#] [number of messages to delete]",
             "catch": [["dm","Sorry! This command doesn't work in DMs."]],
             "f": purge
         }

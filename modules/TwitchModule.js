@@ -308,7 +308,7 @@ function TwitchModule(g){
         "uptime": {
             "src": "*",
             "attr": [1,-1,0,-1],
-            "correct": "[prefix]uptime [channel]",
+            "correct": "[#prefix#][#cmdname#] [channel]",
             "f": uptime
         },
         ////      __DISCORD__       ////
@@ -316,7 +316,7 @@ function TwitchModule(g){
         "addchannel": {
             "src": "discorddm",
             "attr": [1, 2],
-            "correct": "[prefix]addchannel [channel] (@ everyone? (y/N))",
+            "correct": "[#prefix#][#cmdname#] [channel] (@ everyone? (y/N))",
             "f": createchanneldb
         }
     };
