@@ -5,6 +5,12 @@
 // config
 const config = require('./config');
 
+// sqlite
+const fs = require('fs');
+if (!fs.existsSync('./sqlite')){
+    fs.mkdirSync('./sqlite');
+}
+
 // global
 const GlobalBot = require('./GlobalBot');
 const G = new GlobalBot();
