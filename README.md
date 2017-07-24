@@ -54,7 +54,7 @@
       * argument two is an array, [discord_variables, twitch_variables]
 	  
       1. discord_variables
-          * 1 - [discord.js message](https://discord.js.org/#/docs/main/stable/class/Message)
+          * 0 - [discord.js message](https://discord.js.org/#/docs/main/stable/class/Message)
 		
       2. [twitch_variables](https://docs.tmijs.org/v1.2.1/Events.html#message)
           * 0 - string ```channel``` - the channel name
