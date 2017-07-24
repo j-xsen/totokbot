@@ -72,7 +72,7 @@ TwitchBot.prototype.isChannel = function(channel){
     const self = this;
     return new Promise(function(resolve,reject){
         // make sure follows twitch regex
-        const reg = new RegExp(/^[a-zA-Z0-9][\w]{3,24}$/g);
+        const reg = new RegExp(/^[a-z0-9][\w]{3,24}$/g);
         if(!reg.test(channel)){
             resolve(false);
         }

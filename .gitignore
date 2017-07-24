@@ -62,3 +62,6 @@ config.js
 
 # webstorm
 .idea/
+
+# sqlite stuff
+sqlite/

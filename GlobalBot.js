@@ -38,7 +38,7 @@ GlobalBot.prototype.cmdRec = function(msg,src,discord,twitch){
     const check = this.checkIfCMD(com[0],src);
     if(check[0] === 1){
         // make sure it has a valid number of attributes
-        if(!this.checkAttr(com, check[1])){
+        if(!this.checkAttr(com, check[1], src)){
             this.gSay(src,
                 `Correct usage: ${this.convertCorrectUsage(src,this.cmd[check[1]][com[0]]["correct"])}`,
                 [discord,twitch]);
@@ -98,9 +98,14 @@ GlobalBot.prototype.checkIfCMD = function(subbed,src){
 };
 
 // check if command attributes are correct
-GlobalBot.prototype.checkAttr = function (com, mod){
-    const min = this.cmd[mod][com[0]]["attr"][0];
-    const max = this.cmd[mod][com[0]]["attr"][1];
+GlobalBot.prototype.checkAttr = function (com, mod, src){
+    // check if it should even check source
+    let min = this.cmd[mod][com[0]]["attr"][0];
+    let max = this.cmd[mod][com[0]]["attr"][1];
+    if(this.cmd[mod][com[0]]["attr"][2] !== null && src === "twitch"){
+        min = this.cmd[mod][com[0]]["attr"][2];
+        max = this.cmd[mod][com[0]]["attr"][3];
+    }
     const thisAttr = com.length - 1;
 
     // check min
