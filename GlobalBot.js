@@ -31,7 +31,7 @@ GlobalBot.prototype.cmdRec = function(msg,src,discord,twitch){
     if(discord.length === 0 && twitch.length === 0){return false;}
 
     // split up command a bit to be more readable in program
-    let subbed = msg.substring(1);
+    let subbed = src === "twitch" ? msg.substring(this.twitch.prefix.length) : msg.substring(this.discord.discord_prefix.length);
     let com = subbed.split(" ");
 
     // check if it is a command for the source
